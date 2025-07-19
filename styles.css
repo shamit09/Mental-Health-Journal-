@@ -1,0 +1,257 @@
+/* ─────────── Variables ─────────── */
+:root {
+  --background: #121212;
+  --surface: #1f1f1f;
+  --primary: #0f6756;
+  --secondary: #0f6756;
+  --text: #e5e7eb;
+  --gray-800: #272b31;
+  --gray-700: #282b2e;
+  --gray-100: #f3f4f6;
+  --pastel-dark: #0a080f;
+}
+
+/* ─────────── Base ─────────── */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: var(--text);
+}
+a { text-decoration: none; }
+
+/* = Landing Page = */
+body.landing-page { background: var(--background); }
+body.landing-page nav {
+  background: var(--surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.504);
+}
+body.landing-page .container {
+  max-width: 1280px; margin: 0 auto; padding: 0 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 4rem;
+}
+body.landing-page .logo { font-size:1.25rem; font-weight:bold; color:var(--primary); }
+body.landing-page .nav-links a {
+  margin-right:1.5rem; color:var(--text); transition:color .2s;
+}
+body.landing-page .nav-links a:hover { color:var(--secondary); }
+body.landing-page .nav-buttons a {
+  margin-left:1rem; padding:.5rem 1rem; border-radius:.375rem;
+  transition: .2s;
+}
+body.landing-page .login-button {
+  background: var(--primary); color: var(--background);
+}
+body.landing-page .login-button:hover {
+  background: rgba(17, 141, 85, 0.8);
+}
+body.landing-page .signup-button {
+  border:1px solid var(--primary); color:var(--primary); background:transparent;
+}
+body.landing-page .signup-button:hover {
+  background: var(--primary); color: var(--background);
+}
+
+/* Hero */
+body.landing-page .hero {
+  position:relative; height:100vh;
+  background: url('https://source.unsplash.com/1920x1080/?dark,abstract') center/cover no-repeat;
+  display:flex; align-items:center; justify-content:center; text-align:center; padding:0 1rem;
+}
+body.landing-page .hero::before {
+  content:''; position:absolute; inset:0; background:rgba(0,0,0,.7);
+}
+body.landing-page .hero-content {
+  position: relative; background:rgba(31,31,31,.8);
+  padding:2rem; border-radius:1rem; max-width:32rem;
+}
+body.landing-page .hero-content h1 {
+  font-size:2.5rem; margin-bottom:1rem; color:var(--primary);
+}
+body.landing-page .hero-content p { margin-bottom:1.5rem; font-size:1.125rem; }
+body.landing-page .hero-content .cta a {
+  display:inline-block; margin-right:1rem; padding:.75rem 1.5rem;
+  border-radius:.375rem; transition:background .2s;
+}
+body.landing-page .explore {
+  background: var(--secondary); color: var(--background);
+}
+body.landing-page .explore:hover {
+  background: rgba(16,185,129,.8);
+}
+body.landing-page .chat {
+  border:1px solid var(--secondary); color:var(--secondary); background:transparent;
+}
+body.landing-page .chat:hover {
+  background: var(--secondary); color: var(--background);
+}
+
+/* Features */
+body.landing-page .features { padding:4rem 1rem; text-align:center; }
+body.landing-page .features h2 {
+  font-size:2rem; color:var(--primary); margin-bottom:2rem;
+}
+body.landing-page .feature-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap:2rem;
+}
+body.landing-page .feature {
+  background: var(--surface);
+  padding:1.5rem; border-radius:.5rem;
+}
+body.landing-page .feature h3 { margin-bottom:.5rem; }
+
+/* Footer */
+body.landing-page footer {
+  background: var(--surface); padding:2rem 1rem; text-align:center;
+}
+body.landing-page footer p {
+  margin:0; color:var(--text);
+}
+
+/* = Login/SignUp Page = */
+body.login-page {
+  background: var(--background);
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh; padding:0 1rem;
+}
+body.login-page .auth-container {
+  background:#98aa98; padding:2rem; border-radius:1rem;
+  max-width:28rem; width:100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+body.login-page .auth-header h1 {
+  margin:0; text-align:center;
+  font-size:1.75rem; color:var(--primary);
+}
+body.login-page .tab-buttons {
+  display:flex; margin:1.5rem 0;
+}
+body.login-page .tab-buttons button {
+  flex:1; padding:.75rem; font-size:1rem; cursor:pointer;
+  border:none;
+}
+body.login-page .tab-buttons .active {
+  background: var(--primary); color:#ffffff;
+  border-top-left-radius:.5rem; border-top-right-radius:.5rem;
+}
+body.login-page .tab-buttons .inactive {
+  background:#cdddd8; color:var(--gray-700);
+  border:1px solid #ccc;
+  border-top-left-radius:.5rem; border-top-right-radius:.5rem;
+}
+body.login-page form { display:none; }
+body.login-page form.active { display:block; }
+body.login-page label {
+  display:block; margin-bottom:.25rem; color:var(--gray-700);
+}
+body.login-page input,
+body.login-page textarea {
+  width:100%; padding:.5rem; margin-bottom:1rem;
+  background:var(--gray-100); color:#000000;
+  border:1px solid #747e7b; border-radius:.375rem;
+}
+body.login-page .remember {
+  display:flex; align-items:center; margin-bottom:1rem;
+}
+body.login-page .remember input { margin-right:.5rem; }
+body.login-page .auth-buttons button {
+  width:100%; padding:.75rem; font-size:1rem; cursor:pointer;
+  background:var(--primary); color:#fff; border:none;
+  border-radius:.375rem; transition:background .2s;
+}
+body.login-page .auth-buttons button:hover {
+  background: rgba(52, 126, 94, 0.8);
+}
+
+/* = Journal Feed Page = */
+body.journal-page { background: var(--pastel-dark); }
+body.journal-page nav {
+  background: var(--surface);
+  box-shadow: 0 2px 4px rgba(11, 11, 11, 0.5);
+}
+body.journal-page nav .container {
+  max-width:1280px; margin:0 auto; padding:0 1rem;
+  display:flex; align-items:center; justify-content:space-between;
+  height:4rem;
+}
+body.journal-page nav .logo {
+  font-size:1.25rem; font-weight:bold; color:var(--primary);
+}
+body.journal-page nav a {
+  color:var(--text); margin-right:1.5rem; transition:color .2s;
+}
+body.journal-page nav a:hover { color:var(--secondary); }
+
+body.journal-page main {
+  max-width:1280px; margin:0 auto; padding:3rem 1rem;
+}
+body.journal-page h1 {
+  font-size:2rem; color:var(--primary); margin-bottom:2rem;
+}
+body.journal-page .card-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap:1.5rem;
+}
+body.journal-page .card {
+  background: var(--surface);
+  border-radius:.5rem; overflow:hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,.3);
+  display:flex; flex-direction:column;
+}
+body.journal-page .card-content {
+  padding:1rem; flex:1;
+}
+body.journal-page .card-content h2 {
+  font-size:1.25rem; margin-bottom:.5rem;
+}
+body.journal-page .card-content p {
+  font-size:.875rem; color:#aaa; margin-bottom:1rem;
+}
+body.journal-page .card-footer {
+  background: rgba(47,44,58,.5);
+  padding:.75rem 1rem;
+  display:flex; justify-content:space-between; align-items:center;
+}
+body.journal-page .card-footer time {
+  font-size:.75rem; color:#ddd;
+}
+body.journal-page .read-more {
+  font-size:.875rem; color:#fff;
+  border:1px solid #fff; padding:.25rem .5rem;
+  border-radius:.375rem; transition:background .2s;
+}
+body.journal-page .read-more:hover {
+  background: rgba(0, 0, 0, 0.959);
+}
+
+/* Comments */
+body.journal-page .comments {
+  background: rgba(47,44,58,.3);
+  padding:1rem; border-top:1px solid rgba(255,255,255,.1);
+}
+body.journal-page .comments h3 { margin:0 0 .5rem; font-size:.875rem; }
+body.journal-page .comments ul {
+  list-style:none; padding:0; margin:0 0 1rem;
+  max-height:10rem; overflow-y:auto;
+}
+body.journal-page .comments li {
+  background:var(--surface); padding:.5rem;
+  border-radius:.375rem; margin-bottom:.5rem;
+}
+body.journal-page .comments textarea {
+  width:100%; padding:.5rem; background:var(--background);
+  color:var(--text); border:none; border-radius:.375rem;
+  margin-bottom:.5rem; resize:none;
+}
+body.journal-page .comments button {
+  padding:.5rem 1rem; background:var(--secondary);
+  color:var(--background); border:none; border-radius:.375rem;
+  cursor:pointer; transition:background .2s;
+}
+body.journal-page .comments button:hover {
+  background: rgba(16,185,129,.8);
+}

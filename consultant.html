@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Consultants — অন্তরJATRA</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body.consultants-page { background: var(--background); }
+    .consultant-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .consultant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .consultant-card {
+      background: var(--surface);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+    }
+    .consultant-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .consultant-info {
+      padding: 1rem;
+      flex: 1;
+    }
+    .consultant-info h3 {
+      margin: 0 0 0.5rem;
+      color: var(--primary);
+    }
+    .consultant-info .specialty {
+      font-style: italic;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+    }
+    .consultant-info p {
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .consult-button {
+      margin: 1rem;
+      padding: 0.75rem;
+      background: var(--primary);
+      color: var(--background);
+      border: none;
+      border-radius: 0.25rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .consult-button:hover {
+      background: rgba(79,70,229,0.8);
+    }
+  </style>
+</head>
+<body class="consultant-page">
+
+  <nav style="background: var(--surface); box-shadow: 0 2px 4px rgba(0,0,0,0.5); padding:1rem 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 1rem; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <span style="font-size:1.5rem; font-weight:bold; color: var(--primary);">অন্তরJATRA</span>
+        <span style="font-style:italic; color: var(--text); opacity:0.75;">The Inner Journey</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:1.5rem;">
+        <a href="landing.html" style="color:var(--text);">Home</a>
+        <a href="journal.html" style="color:var(--text);">Journal</a>
+        <a href="chat.html" style="color:var(--text);">Chat</a>
+        <a href="consultant.html" style="color:var(--primary); font-weight:bold;">Consultants</a>
+        <a href="login.html" style="padding:.5rem 1rem; border:1px solid var(--primary); color:var(--primary); border-radius:.375rem;">Login</a>
+        <a href="signup.html" style="padding:.5rem 1rem; background:var(--primary); color:var(--background); border-radius:.375rem;">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="consultant-container">
+    <h1 style="color: var(--primary); font-size:2rem; margin-bottom:1rem;">Meet Our Consultants</h1>
+    <div class="consultant-grid">
+      <div class="consultant-card">
+        <img src="https://source.unsplash.com/400x200/?therapist" alt="Dr. Ayesha Rahman">
+        <div class="consultant-info">
+          <h3>Dr. Ayesha Rahman</h3>
+          <div class="specialty">Clinical Psychologist</div>
+          <p>10+ years experience in anxiety and depression therapy. Committed to helping you find inner peace.</p>
+          <a href="book.html?consultant=Dr.%20Ayesha%20Rahman" class="consult-button">Book</a>
+        </div>
+      </div>
+      <div class="consultant-card">
+        <img src="https://source.unsplash.com/400x200/?psychiatrist" alt="Dr. Karim Hassan">
+        <div class="consultant-info">
+          <h3>Dr. Karim Hassan</h3>
+          <div class="specialty">Licensed Psychiatrist</div>
+          <p>Specialist in mood disorders and stress management, offering compassionate care tailored to you.</p>
+          <a href="book.html?consultant=Dr.%20Karim%20Hassan" class="consult-button">Book</a>
+        </div>
+      </div>
+      <!-- add more cards as needed -->
+    </div>
+  </div>
+
+</body>
+</html>

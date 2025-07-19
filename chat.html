@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat — অন্তরJATRA</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Chat page specific styles */
+    body.chat-page { background: var(--background); }
+    .chat-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: var(--surface);
+      border-radius: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .message-list {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .message {
+      max-width: 70%;
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      line-height: 1.4;
+    }
+    .message.user {
+      align-self: flex-end;
+      background: var(--primary);
+      color: var(--background);
+      border-bottom-right-radius: 0.25rem;
+    }
+    .message.ai {
+      align-self: flex-start;
+      background: var(--secondary);
+      color: var(--background);
+      border-bottom-left-radius: 0.25rem;
+    }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .chat-input textarea {
+      flex: 1;
+      padding: 1rem;
+      background: var(--background);
+      color: var(--text);
+      border: none;
+      resize: none;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+    .chat-input button {
+      background: var(--primary);
+      color: var(--background);
+      border: none;
+      padding: 0 1.5rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .chat-input button:hover {
+      background: rgba(79,70,229,0.8);
+    }
+  </style>
+</head>
+<body class="chat-page">
+
+  <nav style="background: var(--surface); box-shadow: 0 2px 4px rgba(0,0,0,0.5); padding:1rem 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 1rem; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <span style="font-size:1.5rem; font-weight:bold; color: var(--primary);">অন্তরJATRA</span>
+        <span style="font-style:italic; color: var(--text); opacity:0.75;">The Inner Journey</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:1.5rem;">
+        <a href="index.html" style="color:var(--text);">Home</a>
+        <a href="journal.html" style="color:var(--text);">Journal</a>
+        <a href="chat.html" style="color:var(--primary); font-weight:bold;">Chat</a>
+        <a href="consultants.html" style="color:var(--text);">Consultants</a>
+        <a href="login.html" style="padding:.5rem 1rem; border:1px solid var(--primary); color:var(--primary); border-radius:.375rem;">Login</a>
+        <a href="signup.html" style="padding:.5rem 1rem; background:var(--primary); color:var(--background); border-radius:.375rem;">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="chat-container">
+    <div id="messages" class="message-list"></div>
+    <div class="chat-input">
+      <textarea id="input" rows="2" placeholder="Type your message..."></textarea>
+      <button id="send">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const inputEl    = document.getElementById('input');
+    const sendBtn    = document.getElementById('send');
+
+    function appendMessage(content, role) {
+      const msg = document.createElement('div');
+      msg.className = 'message ' + role;
+      msg.textContent = content;
+      messagesEl.appendChild(msg);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      appendMessage(text, 'user');
+      inputEl.value = '';
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await response.json();
+        appendMessage(data.reply, 'ai');
+      } catch (e) {
+        appendMessage('Error contacting server.', 'ai');
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>
