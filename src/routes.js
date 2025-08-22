@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { all, get, run } from './db.js';
 import { hashPassword, verifyPassword, signToken } from './auth.js';
-import z from 'zod';
+import { z } from 'zod';
 
 const router = Router();
 
