@@ -119,8 +119,10 @@
       const grid = document.getElementById('consultant-grid');
       try {
         const res = await fetch('/api/consultants');
-        const data = await res.json();
-        const list = data.items || [];
+        const text = await res.text();
+        const data = text ? JSON.parse(text) : null;
+        if (!res.ok) throw new Error((data && data.error) || 'Failed to load consultants');
+        const list = (data && data.items) || [];
         if (!list.length) return; // keep fallback
         grid.innerHTML = '';
         list.forEach(c => {

@@ -84,6 +84,11 @@
       window.location.href = 'journal.html';
     }
 
+    async function readJson(res) {
+      const text = await res.text();
+      return text ? JSON.parse(text) : null;
+    }
+
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
@@ -94,8 +99,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Login failed');
+        const data = await readJson(res);
+        if (!res.ok) throw new Error((data && data.error) || 'Login failed');
         saveSessionAndRedirect(data);
       } catch (err) {
         alert(err.message);
@@ -115,8 +120,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, password })
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Signup failed');
+        const data = await readJson(res);
+        if (!res.ok) throw new Error((data && data.error) || 'Signup failed');
         saveSessionAndRedirect(data);
       } catch (err) {
         alert(err.message);
