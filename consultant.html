@@ -91,7 +91,7 @@
 
   <div class="consultant-container">
     <h1 style="background: linear-gradient(45deg, #4b3a3a, #020608); color: transparent; font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem; background-clip: text; -webkit-background-clip: text; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">Meet Our Consultants</h1>
-    <div class="consultant-grid">
+    <div class="consultant-grid" id="consultant-grid">
       <div class="consultant-card">
         <img src="https://source.unsplash.com/400x200/?therapist" alt="Dr. Ayesha Rahman">
         <div class="consultant-info">
@@ -113,6 +113,36 @@
       <!-- add more cards as needed -->
     </div>
   </div>
+
+  <script>
+    async function renderConsultants() {
+      const grid = document.getElementById('consultant-grid');
+      try {
+        const res = await fetch('/api/consultants');
+        const data = await res.json();
+        const list = data.items || [];
+        if (!list.length) return; // keep fallback
+        grid.innerHTML = '';
+        list.forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'consultant-card';
+          card.innerHTML = `
+            <img src="${c.image_url || 'https://source.unsplash.com/400x200/?person'}" alt="${c.name}">
+            <div class="consultant-info">
+              <h3>${c.name}</h3>
+              <div class="specialty">${c.specialty}</div>
+              <p>${c.bio || ''}</p>
+              <a href="book.html?consultant=${encodeURIComponent(c.name)}" class="consult-button">Book</a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (e) {
+        // keep static fallback
+      }
+    }
+    document.addEventListener('DOMContentLoaded', renderConsultants);
+  </script>
 
 </body>
 </html>

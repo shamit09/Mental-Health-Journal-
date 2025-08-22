@@ -166,6 +166,7 @@
         d.setDate(d.getDate() + i);
         const div = document.createElement('div');
         div.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        div.dataset.iso = d.toISOString().split('T')[0];
         div.addEventListener('click', () => {
           calendarEl.querySelectorAll('div').forEach(el => el.classList.remove('selected'));
           div.classList.add('selected');
@@ -179,6 +180,37 @@
           document.querySelectorAll('#slots button').forEach(b => b.classList.remove('chosen'));
           btn.classList.add('chosen');
         });
+      });
+
+      async function resolveConsultantIdByName(name) {
+        const res = await fetch('/api/consultants');
+        const data = await res.json();
+        const found = (data.items || []).find(c => c.name === name);
+        return found ? found.id : null;
+      }
+
+      document.querySelector('.payment-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        if (!user) { alert('Please login first.'); window.location.href = 'login.html'; return; }
+        const dateEl = document.querySelector('.calendar .selected');
+        const slotEl = document.querySelector('.slots .chosen');
+        if (!dateEl || !slotEl) { alert('Please select date and time slot'); return; }
+        const date = dateEl.dataset.iso;
+        const timeSlot = slotEl.textContent.trim();
+        const consultantId = await resolveConsultantIdByName(consultant);
+        if (!consultantId) { alert('Consultant not found.'); return; }
+        try {
+          const res = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: user.id, consultantId, date, timeSlot })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Failed to book');
+          alert('Booking confirmed!');
+          window.location.href = 'consultant.html';
+        } catch (err) { alert(err.message); }
       });
     });
   </script>
