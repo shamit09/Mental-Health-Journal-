@@ -103,6 +103,10 @@
     const inputEl    = document.getElementById('input');
     const sendBtn    = document.getElementById('send');
 
+    const API_BASE = (window.location.origin && window.location.origin.startsWith('http'))
+      ? window.location.origin
+      : 'http://localhost:3000';
+
     function appendMessage(content, role) {
       const msg = document.createElement('div');
       msg.className = 'message ' + role;
@@ -111,8 +115,12 @@
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    async function readJson(res) {
+    async function readJsonOrHtml(res) {
+      const contentType = res.headers.get('content-type') || '';
       const text = await res.text();
+      if (!contentType.includes('application/json')) {
+        return { __nonJson: true, text };
+      }
       return text ? JSON.parse(text) : null;
     }
 
@@ -123,12 +131,15 @@
       inputEl.value = '';
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('/api/chat', {
+        const response = await fetch(`${API_BASE}/api/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
           body: JSON.stringify({ message: text })
         });
-        const data = await readJson(response);
+        const data = await readJsonOrHtml(response);
+        if (data && data.__nonJson) {
+          throw new Error(`Non-JSON response from server. Is the backend running at ${API_BASE}?`);
+        }
         if (!response.ok) throw new Error((data && data.error) || 'Error contacting server.');
         appendMessage(data.reply, 'ai');
       } catch (e) {
