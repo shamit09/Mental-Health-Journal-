@@ -53,5 +53,97 @@
     <p>© 2025 অন্তরJATRA. All rights reserved.</p>
   </footer>
 
+  <script>
+    function getSessionUser() {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch(e){ return null; }
+    }
+
+    async function fetchJournals() {
+      const res = await fetch('/api/journals');
+      const data = await res.json();
+      return data.items || [];
+    }
+
+    async function fetchComments(journalId) {
+      const res = await fetch(`/api/journals/${journalId}/comments`);
+      const data = await res.json();
+      return data.items || [];
+    }
+
+    async function postComment(journalId, content) {
+      const user = getSessionUser();
+      if (!user) { alert('Please login first.'); window.location.href = 'login.html'; return; }
+      const res = await fetch(`/api/journals/${journalId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, content })
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to post comment');
+      }
+    }
+
+    function createJournalCard(item) {
+      const article = document.createElement('article');
+      article.className = 'card';
+      article.innerHTML = `
+        <div class="card-content">
+          <h2></h2>
+          <p></p>
+        </div>
+        <div class="card-footer">
+          <span></span>
+          <a href="#" class="read-more">Read More</a>
+        </div>
+        <div class="comments">
+          <h3>Comments</h3>
+          <ul class="comments-list"></ul>
+          <textarea placeholder="Add a comment..."></textarea>
+          <button>Post Comment</button>
+        </div>
+      `;
+      article.querySelector('h2').textContent = item.title;
+      article.querySelector('p').textContent = item.content;
+      article.querySelector('span').textContent = `By ${item.author} • ${new Date(item.created_at).toLocaleDateString()}`;
+      const listEl = article.querySelector('.comments-list');
+      fetchComments(item.id).then(comments => {
+        comments.forEach(c => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${c.author}:</strong> ${c.content}`;
+          listEl.appendChild(li);
+        });
+      });
+      const btn = article.querySelector('button');
+      const textarea = article.querySelector('textarea');
+      btn.addEventListener('click', async () => {
+        const content = textarea.value.trim();
+        if (!content) return;
+        try {
+          await postComment(item.id, content);
+          const li = document.createElement('li');
+          const user = getSessionUser();
+          li.innerHTML = `<strong>${user.name}:</strong> ${content}`;
+          listEl.appendChild(li);
+          textarea.value = '';
+        } catch (e) { alert(e.message); }
+      });
+      return article;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const grid = document.querySelector('.card-grid');
+      grid.innerHTML = '';
+      const journals = await fetchJournals();
+      if (!journals.length) {
+        const p = document.createElement('p');
+        p.textContent = 'No journals yet.';
+        grid.appendChild(p);
+      } else {
+        journals.forEach(j => grid.appendChild(createJournalCard(j)));
+      }
+    });
+  </script>
+
 </body>
 </html>

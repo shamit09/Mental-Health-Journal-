@@ -121,15 +121,17 @@
       appendMessage(text, 'user');
       inputEl.value = '';
       try {
+        const token = localStorage.getItem('token');
         const response = await fetch('/api/chat', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
           body: JSON.stringify({ message: text })
         });
         const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Error contacting server.');
         appendMessage(data.reply, 'ai');
       } catch (e) {
-        appendMessage('Error contacting server.', 'ai');
+        appendMessage('Error: ' + e.message, 'ai');
       }
     }
 
