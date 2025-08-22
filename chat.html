@@ -115,6 +115,11 @@
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
+    async function readJson(res) {
+      const text = await res.text();
+      return text ? JSON.parse(text) : null;
+    }
+
     async function sendMessage() {
       const text = inputEl.value.trim();
       if (!text) return;
@@ -127,8 +132,8 @@
           headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
           body: JSON.stringify({ message: text })
         });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Error contacting server.');
+        const data = await readJson(response);
+        if (!response.ok) throw new Error((data && data.error) || 'Error contacting server.');
         appendMessage(data.reply, 'ai');
       } catch (e) {
         appendMessage('Error: ' + e.message, 'ai');

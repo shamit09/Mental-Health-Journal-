@@ -158,6 +158,11 @@
       document.getElementById('consultant-name').textContent = consultant;
       document.getElementById('consultant-input').value = consultant;
 
+      async function readJson(res) {
+        const text = await res.text();
+        return text ? JSON.parse(text) : null;
+      }
+
       // Populate calendar days
       const calendarEl = document.getElementById('calendar');
       const today = new Date();
@@ -184,8 +189,9 @@
 
       async function resolveConsultantIdByName(name) {
         const res = await fetch('/api/consultants');
-        const data = await res.json();
-        const found = (data.items || []).find(c => c.name === name);
+        const data = await readJson(res);
+        if (!res.ok) throw new Error((data && data.error) || 'Failed to load consultants');
+        const found = ((data && data.items) || []).find(c => c.name === name);
         return found ? found.id : null;
       }
 
@@ -206,8 +212,8 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: user.id, consultantId, date, timeSlot })
           });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'Failed to book');
+          const data = await readJson(res);
+          if (!res.ok) throw new Error((data && data.error) || 'Failed to book');
           alert('Booking confirmed!');
           window.location.href = 'consultant.html';
         } catch (err) { alert(err.message); }
